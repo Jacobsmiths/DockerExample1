@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: ./app
+    networks:
+      - web-app
+    volumes:
+      - redis-app
+  frontend:
+    build: ./web
+    networks:
+      - web-app
+
+networks:
+  web-app:
+    driver: bridge
+
+volumes:
+  redis-app
