@@ -1,7 +1,7 @@
 # alpine is lightweight linux version
-FROM python:3.12.3-alpine
+FROM python:latest
 
-WORKDIR ./app
+WORKDIR /app
 
 COPY requirements.txt .
 
@@ -9,4 +9,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# flask default dev port is 5000 so no need tospecifiy and host 0.0.0.0 is the docker network
 CMD ["flask", "run", "--host=0.0.0.0"]

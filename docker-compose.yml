@@ -1,0 +1,36 @@
+services:
+  #has a default port  6379  or sometihng
+  redis-db:
+    image: 
+      "redis"
+    # Define how to check if this service is healthy
+    healthcheck: 
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redis-data:/data #/data is the standard mapping for redis contianers
+  
+  #flask has a defuatl port of 5000
+  app:
+    build: ./app
+    volumes:
+      - ./app:/app # mount for live dev
+    depends_on:
+      redis-db:
+        condition: service_healthy # Wait until Redis is actually ready
+    expose:
+      - 5000
+
+  web:
+    build: ./web
+    depends_on:
+      - app
+    volumes:
+      - ./web:/usr/share/nginx/html
+    ports:
+      - "80:80"
+
+volumes:
+  redis-data:
